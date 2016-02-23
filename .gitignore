@@ -33,3 +33,7 @@ cover
 
 #htmlcov
 *htmlcov*
+
+# Eclipse
+.project
+.pydevproject

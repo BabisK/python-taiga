@@ -23,6 +23,7 @@ from .models import TaskStatuses
 from .models import WikiPages
 from .models import WikiLinks
 from .models import History
+from .models import ProjectTemplates
 from .requestmaker import RequestMaker
 from requests.exceptions import RequestException
 from . import exceptions
@@ -57,6 +58,7 @@ class TaigaAPI:
             self._init_resources()
 
     def _init_resources(self):
+        self.project_templates = ProjectTemplates(self.raw_request)
         self.projects = Projects(self.raw_request)
         self.user_stories = UserStories(self.raw_request)
         self.user_story_attachments = UserStoryAttachments(self.raw_request)

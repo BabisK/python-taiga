@@ -1702,3 +1702,40 @@ class HistoryWiki(HistoryEntity):
     def __init__(self, *args, **kwargs):
         super(type(self), self).__init__(*args, **kwargs)
         self.entity = 'wiki'
+
+
+class ProjectTemplate(InstanceResource):
+    endpoint = 'project-templates'
+
+    allowed_params = [
+        'name', 'slug', 'description', 'default_owner_role',
+        'is_backlog_activated', 'is_kanban_activated',
+        'is_wiki_activated', 'is_issues_activated',
+        'videoconferences', 'videoconferences_salt',
+        'default_options', 'us_statuses', 'points',
+        'task_statuses', 'issue_statuses', 'issue_types',
+        'priorities', 'severities', 'roles']
+
+
+class ProjectTemplates(ListResource):
+    """
+    ProjectTemplates factory
+    """
+
+    instance = ProjectTemplate
+
+    def create(self, name, description, default_owner_role, **attrs):
+        """
+        Create new :class:`ProjectTemplate`
+
+        :param name: name of the :class:`ProjectTemplate`
+        :param description: description of the :class:`ProjectTemplate`
+        :param default_owner_role: default role for the owner of the Project
+        :param attrs: optional attributes for :class:`ProjectTemplate`
+        """
+        attrs.update({'name': name, 'description': description,
+                      'default_owner_role': default_owner_role})
+        return self._new_resource(payload=attrs)
+
+    def import_(self):
+        pass
