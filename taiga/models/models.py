@@ -1706,6 +1706,15 @@ class HistoryWiki(HistoryEntity):
 
 class ProjectTemplate(InstanceResource):
     endpoint = 'project-templates'
+    
+    us_statuses = []
+    points = []
+    task_statuses = []
+    issue_statuses = []
+    issue_types = []
+    priorities = []
+    severities = []
+    roles = []
 
     allowed_params = [
         'name', 'slug', 'description', 'default_owner_role',
@@ -1715,6 +1724,138 @@ class ProjectTemplate(InstanceResource):
         'default_options', 'us_statuses', 'points',
         'task_statuses', 'issue_statuses', 'issue_types',
         'priorities', 'severities', 'roles']
+    
+    def add_us_status(self, name, slug, is_closed, color, wip_limit, order):
+        self.us_statuses.append({'name': name, 'slug': slug, 'is_closed': is_closed,
+                                 'color': color, 'wip_limit': wip_limit, 'order': order})
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'us_statuses': self.us_statuses}
+        )
+        return self
+    
+    def delete_us_status(self, name):
+        self.us_statuses = [x for x in self.us_statuses if x.name != name]
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'us_statuses': self.us_statuses}
+        )
+        return self
+    
+    def add_point(self, name, value, order):
+        self.points.append({'name': name, 'value': value, 'order': order})
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'points': self.points}
+        )
+        return self
+    
+    def delete_point(self, name):
+        self.us_statuses = [x for x in self.us_statuses if x.name != name]
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'us_statuses': self.us_statuses}
+        )
+        return self
+    
+    def add_task_status(self, name, slug, is_closed, color, order):
+        self.task_statuses.append({'name': name, 'slug': slug, 'is_closed': is_closed,
+                                   'color': color, 'order': order})
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'task_statuses': self.task_statuses}
+        )
+        return self
+    
+    def delete_task_status(self, name):
+        self.task_statuses = [x for x in self.task_statuses if x.name != name]
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'task_statuses': self.task_statuses}
+        )
+        return self
+    
+    def add_issue_status(self, name, slug, is_closed, color, order):
+        self.issue_statuses.append({'name': name, 'slug': slug, 'is_closed': is_closed,
+                                    'color': color, 'order': order})
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'issue_statuses': self.issue_statuses}
+        )
+        return self
+    
+    def delete_issue_status(self, name):
+        self.issue_statuses = [x for x in self.issue_statuses if x.name != name]
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'issue_statuses': self.issue_statuses}
+        )
+        return self
+    
+    def add_issue_type(self, name, color, order):
+        self.issue_types.append({'name': name, 'color': color, 'order': order})
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'issue_types': self.issue_types}
+        )
+        return self
+    
+    def delete_issue_type(self, name):
+        self.issue_types = [x for x in self.issue_types if x.name != name]
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'issue_types': self.issue_types}
+        )
+        return self
+    
+    def add_priority(self, name, color, order):
+        self.priorities.append({'name': name, 'color': color, 'order': order})
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'priorities': self.priorities}
+        )
+        return self
+    
+    def delete_priority(self, name):
+        self.priorities = [x for x in self.priorities if x.name != name]
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'priorities': self.priorities}
+        )
+        return self
+    
+    def add_severity(self, name, color, order):
+        self.severities.append({'name': name, 'color': color, 'order': order})
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'severities': self.severities}
+        )
+        return self
+    
+    def delete_severity(self, name):
+        self.severities = [x for x in self.severities if x.name != name]
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'severities': self.severities}
+        )
+        return self
+    
+    def add_role(self, name, slug, permissions, order, computable):
+        self.roles.append({'name': name, 'slug': slug, 'permissions': permissions,
+                           'order': order, 'computable': computable})
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'roles': self.roles}
+        )
+        return self
+    
+    def delete_role(self, name):
+        self.roles = [x for x in self.roles if x.name != name]
+        self.requester.patch(
+            '/{endpoint}/{id}',
+            endpoint=self.endpoint, id=self.id, payload={'roles': self.roles}
+        )
+        return self
 
 
 class ProjectTemplates(ListResource):
@@ -1724,7 +1865,7 @@ class ProjectTemplates(ListResource):
 
     instance = ProjectTemplate
 
-    def create(self, name, description, default_owner_role, **attrs):
+    def create(self, name, slug, description, default_owner_role, **attrs):
         """
         Create new :class:`ProjectTemplate`
 
@@ -1733,9 +1874,11 @@ class ProjectTemplates(ListResource):
         :param default_owner_role: default role for the owner of the Project
         :param attrs: optional attributes for :class:`ProjectTemplate`
         """
-        attrs.update({'name': name, 'description': description,
-                      'default_owner_role': default_owner_role})
+        attrs.update({'name': name, 'slug': slug, 'description': description,
+                      'default_owner_role': default_owner_role, 'is_backlog_activated': False,
+                      'is_kanban_activated': False, 'is_wiki_activated': False,
+                      'is_issues_activated': False, 'us_statuses': '[]',
+                      'points': '[]', 'task_statuses': '[]',
+                      'issue_statuses': '[]', 'issue_types': '[]', 'priorities': '[]',
+                      'severities': '[]', 'roles': '[]'})
         return self._new_resource(payload=attrs)
-
-    def import_(self):
-        pass

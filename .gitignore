@@ -37,3 +37,4 @@ cover
 # Eclipse
 .project
 .pydevproject
+.settings/
