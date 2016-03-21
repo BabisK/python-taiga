@@ -1875,10 +1875,30 @@ class ProjectTemplates(ListResource):
         :param attrs: optional attributes for :class:`ProjectTemplate`
         """
         attrs.update({'name': name, 'slug': slug, 'description': description,
-                      'default_owner_role': default_owner_role, 'is_backlog_activated': False,
-                      'is_kanban_activated': False, 'is_wiki_activated': False,
-                      'is_issues_activated': False, 'us_statuses': '[]',
-                      'points': '[]', 'task_statuses': '[]',
-                      'issue_statuses': '[]', 'issue_types': '[]', 'priorities': '[]',
-                      'severities': '[]', 'roles': '[]'})
+                      'default_owner_role': default_owner_role})
+        if 'is_backlog_activated' not in attrs:
+            attrs.update({'is_backlog_activated': False})
+        if 'is_kanban_activated' not in attrs:
+            attrs.update({'is_kanban_activated': False})
+        if 'is_wiki_activated' not in attrs:
+            attrs.update({'is_wiki_activated': False})
+        if 'is_issues_activated' not in attrs:
+            attrs.update({'is_issues_activated': False})
+        if 'us_statuses' not in attrs:
+            attrs.update({'us_statuses': '[]'})
+        if 'points' not in attrs:
+            attrs.update({'points': '[]'})
+        if 'task_statuses' not in attrs:
+            attrs.update({'task_statuses': '[]'})
+        if 'issue_statuses' not in attrs:
+            attrs.update({'issue_statuses': '[]'})
+        if 'issue_types' not in attrs:
+            attrs.update({'issue_types': '[]'})
+        if 'priorities' not in attrs:
+            attrs.update({'priorities': '[]'})
+        if 'severities' not in attrs:
+            attrs.update({'severities': '[]'})
+        if 'roles' not in attrs:
+            attrs.update({'roles': '[]'})
+        
         return self._new_resource(payload=attrs)
